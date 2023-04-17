@@ -1,27 +1,48 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <header>
+    <router-link to="/">
+      <h1><span> Vue </span>Movies</h1>
+    </router-link>
+  </header>
+  <main>
+    <router-view />
+  </main>
+  <!-- <footer></footer> -->
 </template>
 
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import HelloWorld from "./components/HelloWorld.vue";
-
-@Options({
-  components: {
-    HelloWorld,
-  },
-})
-export default class App extends Vue {}
-</script>
-
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif, "Fira Sans";
+
+  &::selection {
+    background: transparentize($color: #42b883, $amount: 0.5);
+  }
+}
+body {
+  background-color: #35495e;
+}
+a {
+  text-decoration: none;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  background-color: #2c3d4e;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #fff;
+  font-size: 28px;
+
+  span {
+    color: #42b883;
+  }
 }
 </style>
