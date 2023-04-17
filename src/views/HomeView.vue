@@ -16,7 +16,7 @@
     <form @submit.prevent="SearchMovies()" class="search-box">
       <input
         type="text"
-        placeholder="What are you looking for?"
+        placeholder="Search by title, director, or actor"
         v-model="search"
       />
       <input type="submit" value="Search" />
@@ -49,13 +49,48 @@ export default {
     const movies = ref([]);
 
     const SearchMovies = () => {
-      if (search.value != "") {
-        fetch(`http://www.omdbapi.com/?apikey=${env.apiKey}&s=${search.value}`)
+      if (search.value !== "") {
+        fetch(
+          `http://www.omdbapi.com/?apikey=${env.apiKey}&s=${search.value}&type=movie`
+        )
           .then((response) => response.json())
           .then((data) => {
             movies.value = data.Search;
             search.value = "";
           });
+
+        fetch(
+          `http://www.omdbapi.com/?apikey=${env.apiKey}&s=${search.value}&type=series`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            movies.value = [...movies.value, ...data.Search];
+            search.value = "";
+          });
+
+        fetch(
+          `http://www.omdbapi.com/?apikey=${env.apiKey}&s=${search.value}&type=episode`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            movies.value = [...movies.value, ...data.Search];
+            search.value = "";
+          });
+
+        // Search by director name
+        fetch(
+          `http://www.omdbapi.com/?apikey=${env.apiKey}&s=${search.value}&type=movie&director=${search.value}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            movies.value = [...movies.value, ...data.Search];
+            search.value = "";
+          });
+
+        // Search by actor name
+        fetch(
+          `http://www.omdbapi.com/?apikey=${env.apiKey}&s=${search.value}&type=movie&actor=${search.value}`
+        ).then((response) => response.json());
       }
     };
 
