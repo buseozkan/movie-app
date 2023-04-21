@@ -1,27 +1,12 @@
 <template>
   <div class="movie-detail">
     <h2>{{ movie.Title }}</h2>
-    <p>{{ movie.Year }}</p>
+    <p><strong>Director:</strong> {{ movie.Director }}</p>
+    <p><strong>Actors:</strong> {{ movie.Actors }}</p>
+    <p><strong>Release Date:</strong> {{ movie.Released }}</p>
+    <p><strong>Runtime:</strong> {{ movie.Runtime }}</p>
     <img :src="movie.Poster" alt="Movie Poster" class="featured-img" />
-    <p>{{ movie.Plot }}</p>
-    <div v-if="directorResults.length > 0">
-      <h3>Search Results by Director:</h3>
-      <ul>
-        <li v-for="result in directorResults" :key="result.imdbID">
-          {{ result.Title }}
-        </li>
-      </ul>
-    </div>
-
-    <!-- Display actor search results -->
-    <div v-if="actorResults.length > 0">
-      <h3>Search Results by Actor:</h3>
-      <ul>
-        <li v-for="result in actorResults" :key="result.imdbID">
-          {{ result.Title }}
-        </li>
-      </ul>
-    </div>
+    <p><strong>Brief Summary:</strong> {{ movie.Plot }}</p>
   </div>
 </template>
 
@@ -44,6 +29,7 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           movie.value = data;
+          console.log(data);
         });
 
       // Search by title (generic search)

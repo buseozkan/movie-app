@@ -7,10 +7,6 @@
           alt="poster"
           class="featured-img"
         />
-        <div class="detail">
-          <h3>Movie name</h3>
-          <p>details</p>
-        </div>
       </router-link>
     </div>
     <form @submit.prevent="SearchMovies()" class="search-box">
@@ -23,7 +19,6 @@
     </form>
     <div class="movies-list">
       <div class="movie" v-for="movie in movies" :key="movie.imdbID">
-        <!-- {{ movie.Title }} -->
         <router-link :to="'/movie/' + movie.imdbID" class="movie-link">
           <div class="product-image">
             <img :src="movie.Poster" alt="Movie Poster" />
@@ -32,6 +27,8 @@
           <div class="detail">
             <p class="year">{{ movie.Year }}</p>
             <h3>{{ movie.Title }}</h3>
+            <p><strong>Director:</strong> {{ movie.Director }}</p>
+            <p class="names">Actors: {{ movie.Actors }}</p>
           </div>
         </router-link>
       </div>
@@ -40,7 +37,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import env from "@/env.ts";
 
 export default {
@@ -93,11 +90,18 @@ export default {
         ).then((response) => response.json());
       }
     };
-
+    const directorResults = computed(() => {
+      return movies.value
+        ? movies.value.filter((movie) =>
+            movie.Director.toLowerCase().includes(search.value.toLowerCase())
+          )
+        : [];
+    });
     return {
       search,
       movies,
       SearchMovies,
+      directorResults,
     };
   },
 };
@@ -233,7 +237,10 @@ export default {
             color: #aaa;
             font-size: 14px;
           }
-
+          .names {
+            color: #aaa;
+            font-size: 15px;
+          }
           h3 {
             color: #fff;
             font-weight: 600;
