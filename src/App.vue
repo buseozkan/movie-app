@@ -1,13 +1,12 @@
 <template>
   <header>
     <router-link to="/">
-      <h1><span> Vue </span>Movies</h1>
+      <h1><span> Search </span>Movies</h1>
     </router-link>
   </header>
   <main>
     <router-view />
   </main>
-  <!-- <footer></footer> -->
 </template>
 
 <style lang="scss">

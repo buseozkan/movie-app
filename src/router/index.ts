@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import MovieDetail from "../views/MovieDetail.vue";
+import HomeTMDB from "@/views/HomeTMDB.vue";
 
 const routes = [
   {
@@ -12,6 +13,11 @@ const routes = [
     path: "/movie/:id",
     name: "Movie Detail",
     component: MovieDetail,
+  },
+  {
+    path: "/TMDB/",
+    name: "HomeTMDB",
+    component: HomeTMDB,
   },
 ];
 

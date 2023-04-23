@@ -1,32 +1,30 @@
 <template>
   <div class="home">
     <div class="feature-card">
-      <img src="../assets/popcorn.jpeg" alt="poster" class="object-cover" />
+      <router-link to="/movie/tt0409591">
+        <img src="../assets/popcorn.jpeg" alt="poster" class="featured-img" />
+      </router-link>
     </div>
     <form @submit.prevent="SearchMovies()" class="search-box">
       <input
-        class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-        placeholder="Search for movies by title"
         type="text"
-        name="search"
+        placeholder="Search by title, director, or actor"
         v-model="search"
       />
-      <input
-        class="rounded-lg w-2 max-w-xs bg-lime-600"
-        type="submit"
-        value="Search"
-      />
+      <input type="submit" value="Search" />
     </form>
     <div class="movies-list">
-      <div class="movie" v-for="movie in movies" :key="movie.imdbID">
-        <router-link :to="'/movie/' + movie.imdbID" class="movie-link">
+      <div class="movie" v-for="movie in movies" :key="movie.id">
+        <router-link :to="'/movie/' + movie.id" class="movie-link">
           <div class="product-image">
-            <img :src="movie.Poster" alt="Movie Poster" />
-            <div class="type">{{ movie.Type }}</div>
+            <img :src="getPosterPath(movie)" alt="Movie Poster" />
+            <div class="type">{{ movie.media_type }}</div>
           </div>
           <div class="detail">
-            <p class="year">{{ movie.Year }}</p>
-            <h3>{{ movie.Title }}</h3>
+            <p class="year">
+              {{ movie.release_date ? movie.release_date.split("-")[0] : "" }}
+            </p>
+            <h3>{{ movie.title }}</h3>
           </div>
         </router-link>
       </div>
@@ -42,38 +40,45 @@ export default {
   setup() {
     const search = ref("");
     const movies = ref([]);
-    const searchResults = ref([]);
 
     const SearchMovies = () => {
       if (search.value !== "") {
-        fetch(`http://www.omdbapi.com/?apikey=${env.apiKey}&s=${search.value}`)
+        fetch(
+          `https://api.themoviedb.org/3/search/multi?api_key=4fed39af8139b884e3a17a6bf9e293c8&language=en-US&query=${search.value}&page=1&include_adult=false`
+          //          `https://api.themoviedb.org/3/search/movie?api_key=4fed39af8139b884e3a17a6bf9e293c8&language=en-US&query=${search.value}&page=1&include_adult=false&primary_release_year=2020`
+        )
           .then((response) => response.json())
           .then((data) => {
-            movies.value = data.Search;
-            searchResults.value = data.Search;
+            console.log(data);
+            movies.value = data.results;
             search.value = "";
           });
       }
     };
 
     const directorResults = computed(() => {
-      return searchResults.value && searchResults.value.length > 0
-        ? searchResults.value.filter((movie) =>
-            movie.Director.toLowerCase().includes(search.value.toLowerCase())
+      return movies.value
+        ? movies.value.filter((movie) =>
+            movie.director.toLowerCase().includes(search.value.toLowerCase())
           )
         : [];
     });
 
-    const goBack = () => {
-      movies.value = [...searchResults.value];
+    // some of the movies poster returns null - so to look better using a default image.
+    const getPosterPath = (movie) => {
+      if (movie.poster_path) {
+        return "https://image.tmdb.org/t/p/w185" + movie.poster_path;
+      } else {
+        return require("@/assets/popcorn.jpeg");
+      }
     };
 
     return {
       search,
       movies,
+      getPosterPath,
       SearchMovies,
       directorResults,
-      goBack,
     };
   },
 };
@@ -127,6 +132,15 @@ export default {
       background: none;
 
       &[type="text"] {
+        width: 100%;
+        color: #fff;
+        background-color: #496583;
+        font-size: 20px;
+        padding: 10px 16px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        transition: 0.4s;
+
         &::placeholder {
           color: #f3f3f3;
         }

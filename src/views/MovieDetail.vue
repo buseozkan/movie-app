@@ -1,26 +1,38 @@
 <template>
   <div class="movie-detail">
+    <button @click="goBack()" class="rounded-xl bg-slate-200 w-12">Back</button>
+
     <h2>{{ movie.Title }}</h2>
     <p><strong>Director:</strong> {{ movie.Director }}</p>
     <p><strong>Actors:</strong> {{ movie.Actors }}</p>
     <p><strong>Release Date:</strong> {{ movie.Released }}</p>
     <p><strong>Runtime:</strong> {{ movie.Runtime }}</p>
+    <p><strong>IMDb Rating:</strong> {{ movie.imdbRating }} / 10</p>
+    <p v-if="movie.Ratings && movie.Ratings.length > 1">
+      <strong>Rotten Tomatoes:</strong> {{ movie.Ratings[1].Value }}
+    </p>
+    <p v-if="movie.Ratings && movie.Ratings.length > 2">
+      <strong>Metacritic:</strong> {{ movie.Ratings[2].Value }}
+    </p>
+
     <img :src="movie.Poster" alt="Movie Poster" class="featured-img" />
     <p><strong>Brief Summary:</strong> {{ movie.Plot }}</p>
   </div>
 </template>
 
 <script>
-import { ref, onBeforeMount, computed } from "vue";
-import { useRoute } from "vue-router";
+import { ref, onBeforeMount } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import env from "@/env.ts";
 
 export default {
   setup() {
     const movie = ref({});
     const route = useRoute();
+    const router = useRouter();
     const movies = ref([]);
     const search = ref("");
+    const searchResults = ref([]);
 
     onBeforeMount(() => {
       fetch(
@@ -42,30 +54,19 @@ export default {
         });
     });
 
-    // Add computed properties for director and actor search results
-    const directorResults = computed(() => {
-      return movies.value
-        ? movies.value.filter((movie) =>
-            movie.Director.toLowerCase().includes(search.value.toLowerCase())
-          )
-        : [];
-    });
-
-    const actorResults = computed(() => {
-      return movies.value
-        ? movies.value.filter((movie) =>
-            movie.Actors.toLowerCase().includes(search.value.toLowerCase())
-          )
-        : [];
-    });
+    const goBack = () => {
+      movies.value = [...searchResults.value];
+      search.value = route.query.q || "";
+      searchResults.value = [];
+      router.push({ path: "/" });
+    };
 
     return {
       movie,
+      goBack,
       search,
       route,
       movies,
-      directorResults,
-      actorResults,
     };
   },
 };
