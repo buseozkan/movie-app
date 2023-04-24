@@ -1,9 +1,5 @@
 <template>
   <div class="home">
-    <div class="feature-card">
-      <img src="../assets/popcorn.jpeg" alt="poster" class="object-cover" />
-    </div>
-
     <form @submit.prevent="SearchMovies()" class="search-box">
       <input
         class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
@@ -108,37 +104,6 @@ export default {
 
 <style lang="scss">
 .home {
-  .feature-card {
-    position: relative;
-
-    .featured-image {
-      display: block;
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
-      position: relative;
-      z-index: 0;
-    }
-
-    .detail {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 16px;
-      z-index: 1;
-
-      h3 {
-        color: #fff;
-        margin-bottom: 16px;
-      }
-
-      p {
-        color: #fff;
-      }
-    }
-  }
   .search-box {
     display: flex;
     flex-direction: column;

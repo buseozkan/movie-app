@@ -55,7 +55,7 @@ export default {
     });
 
     const goBack = () => {
-      router.push({ path: "/" });
+      router.push({ path: "/Search/" });
     };
 
     return {

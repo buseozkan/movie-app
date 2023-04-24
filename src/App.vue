@@ -1,13 +1,26 @@
 <template>
-  <header>
+  <NavBarView />
+
+  <!-- <header>
     <router-link to="/">
       <h1><span> Search </span>Movies & Series</h1>
     </router-link>
-  </header>
+  </header> -->
   <main>
     <router-view />
   </main>
 </template>
+
+<script>
+import NavBarView from "@/views/NavBarView.vue";
+
+export default {
+  name: "App",
+  components: {
+    NavBarView,
+  },
+};
+</script>
 
 <style lang="scss">
 * {

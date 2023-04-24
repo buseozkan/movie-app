@@ -2,10 +2,16 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import MovieDetail from "../views/MovieDetail.vue";
 import HomeTMDB from "@/views/HomeTMDB.vue";
+import LandingView from "@/views/LandingView.vue";
 
 const routes = [
   {
     path: "/",
+    name: "LandingView",
+    component: LandingView,
+  },
+  {
+    path: "/Search/",
     name: "HomeView",
     component: HomeView,
   },
