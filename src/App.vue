@@ -1,7 +1,7 @@
 <template>
   <header>
     <router-link to="/">
-      <h1><span> Search </span>Movies</h1>
+      <h1><span> Search </span>Movies & Series</h1>
     </router-link>
   </header>
   <main>

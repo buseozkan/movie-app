@@ -55,9 +55,6 @@ export default {
     });
 
     const goBack = () => {
-      movies.value = [...searchResults.value];
-      search.value = route.query.q || "";
-      searchResults.value = [];
       router.push({ path: "/" });
     };
 

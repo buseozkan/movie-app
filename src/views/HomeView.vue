@@ -3,6 +3,7 @@
     <div class="feature-card">
       <img src="../assets/popcorn.jpeg" alt="poster" class="object-cover" />
     </div>
+
     <form @submit.prevent="SearchMovies()" class="search-box">
       <input
         class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
@@ -17,6 +18,14 @@
         value="Search"
       />
     </form>
+    <div class="flex justify-center mt-4">
+      <button
+        @click="refresh"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Refresh
+      </button>
+    </div>
     <div class="movies-list">
       <div class="movie" v-for="movie in movies" :key="movie.imdbID">
         <router-link :to="'/movie/' + movie.imdbID" class="movie-link">
@@ -35,7 +44,7 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import env from "@/env.ts";
 
 export default {
@@ -43,6 +52,15 @@ export default {
     const search = ref("");
     const movies = ref([]);
     const searchResults = ref([]);
+
+    // Fetch search results from local storage on component mount
+    onMounted(() => {
+      const searchResultsData = localStorage.getItem("searchResults");
+      if (searchResultsData) {
+        searchResults.value = JSON.parse(searchResultsData);
+        movies.value = searchResults.value;
+      }
+    });
 
     const SearchMovies = () => {
       if (search.value !== "") {
@@ -52,6 +70,7 @@ export default {
             movies.value = data.Search;
             searchResults.value = data.Search;
             search.value = "";
+            localStorage.setItem("searchResults", JSON.stringify(data.Search));
           });
       }
     };
@@ -65,7 +84,14 @@ export default {
     });
 
     const goBack = () => {
-      movies.value = [...searchResults.value];
+      // Navigate back to the previous page
+      window.history.back();
+    };
+
+    const refresh = () => {
+      localStorage.removeItem("searchResults");
+      searchResults.value = [];
+      movies.value = [];
     };
 
     return {
@@ -74,6 +100,7 @@ export default {
       SearchMovies,
       directorResults,
       goBack,
+      refresh,
     };
   },
 };
